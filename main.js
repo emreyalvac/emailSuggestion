@@ -60,7 +60,7 @@ email.addEventListener('keyup', function() {
       for(var i = 0; i < popularEmails.length; i++) {
         auto.innerHTML += '<li>' + email.value + popularEmails[i] + '</li>';
       }
-      itemList = document.querySelectorAll('.autosuffix li');
+      itemList = document.querySelectorAll('.suggestions li');
       itemList[0].classList.add('selected');
     }
     
@@ -78,7 +78,7 @@ email.addEventListener('keyup', function() {
       }
     }
     
-    var itemsList = document.querySelectorAll('.autosuffix li');
+    var itemsList = document.querySelectorAll('.suggestions li');
     
     for(var j = 0; j < itemsList.length; j++) {
       itemsList[j].addEventListener('click', function() {
