@@ -1,4 +1,213 @@
 <label>Email</label>
 <input type="email" class="email" required>
 <ul class="suggestions"></ul>
-<script src="main.js"></script>
+
+<script>
+
+var email = document.querySelector('.email'),
+    auto = document.querySelector('.suggestions'),
+
+    popularEmails = ['gmail.com', 'googlemail.com', 'hotmail.com', 'yahoo.com', 'msn.com', 'aol.com'],
+
+    itemSelected = 0,
+    
+    itemList = [];
+
+window.addEventListener('keyup', function(){
+    
+  if(window.event.keyCode === 40) { 
+    if(itemSelected === (itemList.length - 1)) {
+      itemSelected = itemList.length - 1;
+    }
+    else {
+      itemSelected += 1;
+    }
+  }
+
+  if(window.event.keyCode === 38) { 
+    if(itemSelected === 0) {
+      return;
+    }
+    else {
+      itemSelected -= 1;
+    }
+  }
+  
+  if(window.event.keyCode === 13) { 
+    email.value = itemList[itemSelected].textContent;
+    auto.innerHTML = '';
+  }
+  
+  for(var i = 0; i < itemList.length; i++) {
+    if(itemList[i].classList.contains('selected')) {
+      itemList[i].classList.remove('selected');
+    }
+    if(itemSelected === i) {
+      itemList[i].classList.add('selected');
+    }
+  }
+  
+  console.log(itemSelected, itemList);
+});
+
+
+email.addEventListener('keyup', function() {
+  auto.innerHTML = '';
+  
+  if(email.value.match('@')) {
+    var afterAt = email.value.substring(email.value.indexOf('@') + 1, email.value.length);
+    var popularEmailsSub = [];
+    
+    for(var l = 0; l < popularEmails.length; l++) {
+      popularEmailsSub.push(popularEmails[l].substring(0, afterAt.length))
+    }
+    
+    if(afterAt == '') {
+      for(var i = 0; i < popularEmails.length; i++) {
+        auto.innerHTML += '<li>' + email.value + popularEmails[i] + '</li>';
+      }
+      itemList = document.querySelectorAll('.suggestions li');
+      itemList[0].classList.add('selected');
+    }
+    
+    else if(!(afterAt == '')) {
+      var matchedEmails = [];
+      
+      for(var k = 0; k < popularEmails.length; k++) {
+        if(popularEmailsSub[k].match(afterAt)) {
+          matchedEmails.push(popularEmails[k]);                   
+        }
+      }
+      
+      for(var i = 0; i < matchedEmails.length; i++) {
+        auto.innerHTML += '<li>' + email.value.substring(0, email.value.indexOf('@')) + '@' + matchedEmails[i] + '</li>';
+      }
+    }
+    
+    var itemsList = document.querySelectorAll('.suggestions li');
+    
+    for(var j = 0; j < itemsList.length; j++) {
+      itemsList[j].addEventListener('click', function() {
+        email.value = this.textContent;
+        auto.innerHTML = '';
+      });
+    }
+  }
+});
+
+
+</script>
+
+<style>
+
+html,
+body {
+  width: 100%;
+  font-family: Roboto, sans-serif;
+}
+
+h1 {
+  font-size: 26px;
+  background: #2ecc71;
+  color: white;
+  padding: 40px 0 40px 20%;
+  margin-bottom: 50px;
+}
+
+h2 {
+  margin-left: 20%;
+  font-size: 22px;
+  color: #34495e;
+}
+
+label {
+  margin-left: 20%;
+  margin-top: 100px;
+  display: block;
+  font-size: 14px;
+}
+
+.email {
+  width: 260px;
+  margin-left: 20%;
+  display: block;
+  font-size: 16px;
+  padding: 10px 0;
+  border: none;
+  border-bottom: solid 1px #383838;
+  color: #383838;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 98%, #454545 98%);
+  background-repeat: no-repeat;
+  background-size: 260px 100%;
+  background-position: -260px 0;
+  transition: background-position 0.2s cubic-bezier(0.64, 0.09, 0.08, 1);
+}
+.email:focus, .email:valid {
+  background-position: 0 0;
+  outline: none;
+}
+
+.suggestions {
+  margin-left: 20%;
+  margin-top: 10px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
+  display: inline-block;
+  border-radius: 3px;
+  position: absolute;
+}
+.suggestions li {
+  padding: 14px;
+  padding-right: 20px;
+  cursor: pointer;
+  color: #383838;
+}
+.suggestions li:first-of-type {
+  border-radius: 3px 3px 0 0;
+}
+.suggestions li:last-of-type {
+  border-radius: 0 0 3px 3px;
+}
+.suggestions li:hover {
+  background: #ebebeb;
+}
+
+.selected {
+  background: #ebebeb;
+}
+
+.follow {
+  overflow: hidden;
+  width: 42px;
+  height: 42px;
+  border-radius: 50px;
+  background: #03a9f4;
+  display: block;
+  margin: 300px auto 0;
+  white-space: nowrap;
+  padding: 13px;
+  box-sizing: border-box;
+  color: white;
+  transition: all 0.2s ease;
+  font-family: Roboto, sans-serif;
+  text-decoration: none;
+  box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.2);
+}
+.follow i {
+  margin-right: 20px;
+  transition: margin-right 0.2s ease;
+}
+.follow:hover {
+  width: 134px;
+}
+.follow:hover i {
+  margin-right: 10px;
+}
+
+@media screen and (max-width: 800px) {
+  .follow {
+    margin: 400px auto 0;
+  }
+}
+
+
+</style>
